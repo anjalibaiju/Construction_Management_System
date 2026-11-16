@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Construction Enquiry</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #edf1f5;
+            margin: 0;
+        }
+
+        header {
+            background: #17324d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .box {
+            background: white;
+            max-width: 550px;
+            margin: 40px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px #ccc;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 130px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #2864a8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Construction Management System</h1>
+</header>
+
+<div class="box">
+
+    <h2>Submit Project Enquiry</h2>
+
+    <p>Enter your construction project details below.</p>
+
+    <form method="POST">
+
+        <label>Project Title</label>
+
+        <input type="text"
+               name="title"
+               placeholder="Example: Residential House Construction"
+               required>
+
+        <label>Project Description</label>
+
+        <textarea name="description"
+                  placeholder="Describe your construction requirements..."
+                  required></textarea>
+
+        <button type="submit">
+            Submit Enquiry
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

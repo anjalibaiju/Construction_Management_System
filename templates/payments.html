@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Payments</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #1d3557;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 14px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #245da5;
+            color: white;
+        }
+
+        button {
+            padding: 8px 14px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .approve {
+            background: green;
+        }
+
+        .reject {
+            background: red;
+        }
+
+        .back {
+            display: inline-block;
+            background: #245da5;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Manage Client Payments</h1>
+
+    <p>View and manage client payment records.</p>
+
+    <a class="back" href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+
+    {% if payments %}
+
+    <table>
+        <tr>
+            <th>Project</th>
+            <th>Client</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for payment in payments %}
+        <tr>
+            <td>{{ payment.title }}</td>
+            <td>{{ payment.client_name }}</td>
+            <td>₹{{ payment.amount }}</td>
+            <td>{{ payment.method }}</td>
+            <td>{{ payment.created_at }}</td>
+            <td>{{ payment.status }}</td>
+
+            <td>
+                {% if payment.status == 'Submitted' %}
+
+                <form method="POST"
+                    action="{{ url_for('update_payment',
+                    payment_id=payment.id,
+                    action='approve') }}">
+
+                    <button class="approve" type="submit">
+                        Approve
+                    </button>
+                </form>
+
+                <br>
+
+                <form method="POST"
+                    action="{{ url_for('update_payment',
+                    payment_id=payment.id,
+                    action='reject') }}">
+
+                    <button class="reject" type="submit">
+                        Reject
+                    </button>
+                </form>
+
+                {% else %}
+                    No action needed
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <h3>No payment records found.</h3>
+
+    <p>Payments submitted by clients will appear here.</p>
+
+    {% endif %}
+
+</body>
+</html>

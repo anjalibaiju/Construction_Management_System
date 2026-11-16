@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Construction Management System - Login</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #edf1f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #17324d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-box {
+            background: white;
+            width: 350px;
+            margin: 70px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px #cccccc;
+        }
+
+        h2 {
+            text-align: center;
+            color: #17324d;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            background: #2864a8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Construction Management System</h1>
+    </div>
+
+    <div class="login-box">
+
+        <h2>Admin / User Login</h2>
+
+        <form method="POST">
+
+            <label>Email Address</label>
+            <input type="email"
+                   name="email"
+                   placeholder="Enter your email"
+                   required>
+
+            <label>Password</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Enter your password"
+                   required>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="register">
+            <p>Don't have an account?</p>
+            <a href="/register">Register Here</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Construction Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f4f8;
+            color: #26364a;
+        }
+
+        header {
+            background: #17324d;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            background: #2864a8;
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1250px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #17324d;
+        }
+
+        .section {
+            background: white;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000010;
+            overflow-x: auto;
+        }
+
+        h2 {
+            color: #17324d;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 11px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccd2da;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #2864a8;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        button:hover {
+            background: #17324d;
+        }
+
+        .reject {
+            background: #bd3b3b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 13px;
+            border-bottom: 1px solid #e4e8ed;
+        }
+
+        th {
+            background: #edf2f7;
+        }
+
+        .message {
+            background: #fff0ce;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                gap: 15px;
+            }
+
+            .container {
+                width: 96%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Construction Management System</h2>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome, Administrator! Manage your construction activities here.</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- DASHBOARD SUMMARY -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Clients</h3>
+            <div class="number">{{ counts.users }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Staff</h3>
+            <div class="number">{{ counts.staff }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Enquiries</h3>
+            <div class="number">{{ counts.enquiries }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Projects</h3>
+            <div class="number">{{ counts.projects }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Approved Payments</h3>
+            <div class="number">₹{{ "%.2f"|format(counts.payments) }}</div>
+        </div>
+
+    </div>
+
+
+    <!-- CLIENT ENQUIRIES -->
+
+    <div class="section">
+
+        <h2>Client Enquiry Management</h2>
+
+        {% if enquiries %}
+
+        <table>
+            <tr>
+                <th>Client</th>
+                <th>Project</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            {% for enquiry in enquiries %}
+            <tr>
+                <td>{{ enquiry.client_name }}</td>
+                <td>{{ enquiry.title }}</td>
+                <td>{{ enquiry.description }}</td>
+                <td>{{ enquiry.status }}</td>
+
+                <td>
+                    {% if enquiry.status == 'Pending' %}
+
+                    <form method="POST"
+                    action="{{ url_for('manage_enquiry', enquiry_id=enquiry.id, action='approve') }}">
+                        <button type="submit">Approve</button>
+                    </form>
+
+                    <form method="POST"
+                    action="{{ url_for('manage_enquiry', enquiry_id=enquiry.id, action='reject') }}">
+                        <button type="submit" class="reject">Reject</button>
+                    </form>
+
+                    {% else %}
+                        No action
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+            <p>No enquiries available.</p>
+        {% endif %}
+
+    </div>
+
+
+    <!-- ADD STAFF -->
+
+    <div class="section">
+
+        <h2>Staff Management</h2>
+
+        <h3>Add New Staff Member</h3>
+
+        <form method="POST" action="{{ url_for('add_staff') }}">
+
+            <label>Staff Name</label>
+            <input type="text" name="name" required>
+
+            <label>Email Address</label>
+            <input type="email" name="email" required>
+
+            <label>Password</label>
+            <input type="password" name="password"
+                   minlength="6" required>
+
+            <button type="submit">Add Staff</button>
+
+        </form>
+
+    </div>
+
+
+    <!-- PROJECT MANAGEMENT -->
+
+    <div class="section">
+
+        <h2>Project Management</h2>
+
+        {% if projects %}
+
+        <table>
+
+            <tr>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Assigned Staff</th>
+                <th>Progress</th>
+                <th>Status</th>
+                <th>Assign Staff</th>
+            </tr>
+
+            {% for project in projects %}
+
+            <tr>
+                <td>{{ project.title }}</td>
+                <td>{{ project.client_name }}</td>
+                <td>{{ project.staff_name or 'Not Assigned' }}</td>
+                <td>{{ project.progress }}%</td>
+                <td>{{ project.status }}</td>
+
+                <td>
+
+                    <form method="POST"
+                    action="{{ url_for('assign_staff', project_id=project.id) }}">
+
+                        <select name="staff_id" required>
+
+                            <option value="">Select Staff</option>
+
+                            {% for member in staff %}
+
+                            <option value="{{ member.id }}">
+                                {{ member.name }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <button type="submit">Assign</button>
+
+                    </form>
+
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+            <p>No projects available yet.</p>
+        {% endif %}
+
+    </div>
+
+    <!-- PROOF OF WORK MANAGEMENT -->
+
+<div class="section">
+
+    
+<h2>Proof of Work Management</h2>
+
+{% if proofs %}
+
+<table>
+    <tr>
+        <th>Project</th>
+        <th>Staff</th>
+        <th>Description</th>
+        <th>File</th>
+        <th>Upload Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for proof in proofs %}
+    <tr>
+        <td>{{ proof.project_title }}</td>
+
+        <td>{{ proof.staff_name }}</td>
+
+        <td>{{ proof.note }}</td>
+
+        <td>
+            <a href="{{ url_for('uploaded_file', filename=proof.filename) }}"
+               target="_blank">
+                View Uploaded Proof
+            </a>
+        </td>
+
+        <td>{{ proof.uploaded_at }}</td>
+
+        <td>
+            <strong>{{ proof.status }}</strong>
+        </td>
+
+        <td>
+            {% if proof.status == 'Pending' %}
+
+            <form method="POST"
+                  action="{{ url_for('approve_proof', proof_id=proof.id) }}">
+                <button type="submit">Approve</button>
+            </form>
+
+            <form method="POST"
+                  action="{{ url_for('reject_proof', proof_id=proof.id) }}">
+                <button type="submit">Reject</button>
+            </form>
+
+            {% else %}
+                No action needed
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>No proof of work uploaded yet.</p>
+{% endif %}
+
+
+</div>
+    <!-- PAYMENT AND REPORTS -->
+
+    <div class="section">
+
+        <h2>Payments and Reports</h2>
+
+        <p>Manage client payments and view project reports.</p>
+
+        <a href="{{ url_for('payments') }}">
+            <button type="button">Manage Payments</button>
+        </a>
+
+        <a href="{{ url_for('reports') }}">
+            <button type="button">View Reports</button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

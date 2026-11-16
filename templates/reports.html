@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Reports</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #444;
+            color: white;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h2>Construction Project Reports</h2>
+
+    {% if projects %}
+    <table>
+        <tr>
+            <th>Project Status</th>
+            <th>Number of Projects</th>
+        </tr>
+
+        {% for report in projects %}
+        <tr>
+            <td>{{ report.status }}</td>
+            <td>{{ report.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>No project reports available.</p>
+    {% endif %}
+
+    <h3>Approved Payment Total: ₹{{ payment_total }}</h3>
+
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+</div>
+</body>
+</html>
+

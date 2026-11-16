@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Management System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f1f4f8;
+            color: #26364a;
+            text-align: center;
+        }
+
+        .container {
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #ccc;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 10px;
+            background: #2864a8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Construction Management System</h1>
+
+        <h2>Welcome!</h2>
+
+        <p>Manage construction projects easily and efficiently.</p>
+
+        <a href="{{ url_for('login') }}">Login</a>
+
+        <a href="{{ url_for('register') }}">Register</a>
+    </div>
+</body>
+</html>
